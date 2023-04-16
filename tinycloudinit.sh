@@ -18,6 +18,8 @@ blkid -t TYPE="iso9660" -o device | while read name; do
     cp $CS.rom/ec2/latest/user-data $CS
   elif [ -f $CS.rom/openstack/latest/user-data ]; then
     cp $CS.rom/openstack/latest/user-data $CS
+  elif [ -f $CS.rom/user-data ]; then
+    cp $CS.rom/user-data $CS
   fi
   umount $CS.rom
 done
