@@ -21,6 +21,10 @@ blkid -t TYPE="iso9660" -o device | while read name; do
   elif [ -f $CS.rom/user-data ]; then
     cp $CS.rom/user-data $CS
   fi
+  if [ -f $CS.rom/meta-data ]; then
+    hostname="$(awk '/^local-hostname:/ {print $2}' $CS.rom/meta-data)"
+    [ -z "$hostname" ] || hostname $hostname
+  fi
   umount $CS.rom
 done
 rmdir $CS.rom

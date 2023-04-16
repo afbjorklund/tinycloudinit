@@ -13,6 +13,7 @@ Very Tiny cloud-init script for contextualization of small linux instances.
  - #!/bin/bash script run
  - #!/bin/sh script run
  - #cloud-config [limited support]
+ - local-hostname in metadata
 
 Regarding #cloud-config support, commands supported are:
  - users
