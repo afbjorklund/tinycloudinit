@@ -16,6 +16,9 @@ Very Tiny cloud-init script for contextualization of small linux instances.
 
 Regarding #cloud-config support, commands supported are:
  - users
+   - uid
+   - homedir
+   - shell
    - sudo
    - ssh-authorized-keys
    - groups

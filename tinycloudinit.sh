@@ -96,9 +96,12 @@ for f in $CS*; do
       while [ $# -gt 0 ]; do
         case $1 in
           -k) uk="$uk$2\n"; shift 2;;
+          -s) ud="$ud $1 $2"; shift 2;;
           -S) uS="$2"; shift 2;;
           -g) ud="$ud $1 $2"; addgroup $2 &>/dev/null; shift 2;;
           -G) ud="$ud $1 $2"; for g in ${2//,/ }; do groupadd -f $g; done; shift 2;;
+          -h) ud="$ud $1 $2"; shift 2;;
+          -u) ud="$ud $1 $2"; shift 2;;
           *) ud="$ud $1"; shift 1;;
         esac
       done
@@ -128,7 +131,7 @@ for f in $CS*; do
       echo "ok!"
     }
 
-    awk 'BEGIN{FS=":|-"}{gsub(/^[ \t]+/,"",$1);gsub(/^[ \t]+/,"",$2);gsub(/^[ \t]+/,"",$3);if($1=="users"){u=1}if(u==1){if(ua!=""){if($1=="primary-group")ua=ua" -g \""$2"\"";if($1=="groups")ua=ua" -G \""$2"\"";if($1=="sudo")ua=ua" -S \""$2"\"";if($1=="passwd")ua=ua" -p \""$2"\"";if($1=="ssh"&&$2=="authorized"){while(1){getline;k=$0;gsub(/^[ \t]+-[ ]+/,"",k);if(k!~/^ssh-rsa/)break;ua=ua" -k \""k"\""}}}if($1==""&&$2=="name"){if(ua!=""){print "newuser "ua;}ua=$3;}}}END{if(ua!=""){print "newuser "ua;}}' $f | while read line; do
+    awk 'BEGIN{FS=":|-"}{gsub(/^[ \t]+/,"",$1);gsub(/^[ \t]+/,"",$2);gsub(/^[ \t]+/,"",$3);if($1=="users"){u=1}if(u==1){if(ua!=""){if($1=="primary-group")ua=ua" -g \""$2"\"";if($1=="groups")ua=ua" -G \""$2"\"";if($1=="homedir")ua=ua" -h "$2"";if($1=="shell")ua=ua" -s \""$2"\"";if($1=="sudo")ua=ua" -S \""$2"\"";if($1=="passwd")ua=ua" -p \""$2"\"";if($1=="uid")ua=ua" -u \""$2"\"";if($1=="ssh"&&$2=="authorized"){while(1){getline;k=$0;gsub(/^[ \t]+-[ ]+/,"",k);if(k!~/^ssh-rsa/)break;ua=ua" -k \""k"\""}}}if($1==""&&$2=="name"){if(ua!=""){print "newuser "ua;}ua=$3;}}}END{if(ua!=""){print "newuser "ua;}}' $f | while read line; do
       eval $line
     done
 
