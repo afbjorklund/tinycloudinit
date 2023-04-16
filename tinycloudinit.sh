@@ -125,6 +125,7 @@ for f in $CS*; do
       fi
       if [[ -n "$uS" ]]; then
         [ "$uS" == "ALL=(ALL)NOPASSWD" ] && uS="ALL=(ALL) NOPASSWD:ALL"
+        [ "$uS" == "ALL=(ALL) NOPASSWD" ] && uS="ALL=(ALL) NOPASSWD:ALL"
         [ "$uS" == "ALL=(ALL)ALL" ] && uS="ALL=(ALL) ALL"
         grep -q -F "$un $uS" /etc/sudoers ||  echo "$un $uS" >> /etc/sudoers
       fi
