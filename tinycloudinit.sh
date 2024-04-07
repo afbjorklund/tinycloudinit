@@ -141,7 +141,7 @@ for f in $CS*; do
       echo "ok!"
     }
 
-    awk 'BEGIN{FS=":|-"}{gsub(/^[ \t]+/,"",$1);gsub(/^[ \t]+/,"",$2);gsub(/^[ \t]+/,"",$3);if($1=="users"){u=1}if(u==1){if(ua!=""){if($1=="primary-group")ua=ua" -g \""$2"\"";if($1=="groups")ua=ua" -G \""$2"\"";if($1=="homedir")ua=ua" -h "$2"";if($1=="shell")ua=ua" -s \""$2"\"";if($1=="sudo")ua=ua" -S \""$2"\"";if($1=="passwd")ua=ua" -p \""$2"\"";if($1=="lock_passwd")ua=ua" -D";if($1=="uid")ua=ua" -u \""$2"\"";if(($1=="ssh"&&$2=="authorized"&&$3="keys")||$1=="ssh_authorized_keys"){while(getline){k=$0;gsub(/^[ \t]+-[ ]+/,"",k);gsub(/"/,"",k);if(k!~/^ssh/)break;ua=ua" -k \""k"\""}}}if($1==""&&$2=="name"){if(ua!=""){print "newuser "ua;}ua=$3;}}}END{if(ua!=""){print "newuser "ua;}}' $f | while read line; do
+    awk 'BEGIN{FS=":|-"}{gsub(/^[ \t]+/,"",$1);gsub(/^[ \t]+/,"",$2);gsub(/^[ \t]+/,"",$3);if($1=="users"){u=1}if(u==1){if(ua!=""){if($1=="primary-group")ua=ua" -g \""$2"\"";if($1=="groups")ua=ua" -G \""$2"\"";if($1=="homedir")ua=ua" -h "$2"";if($1=="shell")ua=ua" -s \""$2"\"";if($1=="sudo")ua=ua" -S \""$2"\"";if($1=="passwd")ua=ua" -p \""$2"\"";if($1=="lock_passwd")ua=ua" -D";if($1=="uid"){gsub(/"/,"",$2);ua=ua" -u \""$2"\""};if(($1=="ssh"&&$2=="authorized"&&$3="keys")||$1=="ssh_authorized_keys"){while(getline){k=$0;gsub(/^[ \t]+-[ ]+/,"",k);gsub(/"/,"",k);if(k!~/^ssh/)break;ua=ua" -k \""k"\""}}}if($1==""&&$2=="name"){if(ua!=""){print "newuser "ua;}ua=$3;}}}END{if(ua!=""){print "newuser "ua;}}' $f | while read line; do
       eval $line
     done
 
